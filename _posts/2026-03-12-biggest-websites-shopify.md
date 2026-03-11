@@ -2,6 +2,7 @@
 layout: post
 title: "The Biggest Websites in the World Are Quietly Using Shopify"
 permalink: /biggest-websites-use-shopify/
+description: "Cross-referencing Shopify hosts with Tranco shows Shopify quietly powers stores for major brands, universities, and governments."
 ---
 
 *Disclosure: I'm a former Shopify employee and current shareholder. This is not financial advice.*

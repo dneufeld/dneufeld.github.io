@@ -2,6 +2,7 @@
 layout: post
 title: "The Most-Visited Shopify Stores Aren't the Ones You Think"
 permalink: /most-visited-shopify-stores/
+description: "Ranking Shopify-native domains by Tranco reveals major Indian and Pakistani merchants that Western web rankings largely miss."
 ---
 
 *Disclosure: I'm a former Shopify employee and current shareholder. This is not financial advice.*
