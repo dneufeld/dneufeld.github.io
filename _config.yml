@@ -4,7 +4,7 @@ url: "https://dneufeld.github.io"
 baseurl: ""
 theme: minima
 markdown: kramdown
-cloudflare_web_analytics_token: ""
+cloudflare_web_analytics_token: "47435a3c782a4d4ca965ab21b07a30d3"
 plugins:
   - jekyll-feed
 show_excerpts: false
