@@ -16,9 +16,27 @@ I cross-referenced 1.3 million Shopify stores (detected by [scanning Common Craw
 
 [Tranco](https://tranco-list.eu/) is a research-grade domain popularity ranking. It aggregates data from multiple sources — DNS traffic (Cloudflare Radar, Cisco Umbrella), real browser usage (Chrome UX Report), and passive DNS (Farsight) — and averages over 30 days to reduce volatility. Alexa rankings shut down in 2022, and single-source lists like Similarweb are easy to game. Tranco was built specifically to address this for academic research, and it's become the standard ranking list in security and web measurement papers.
 
-I joined Tranco's top 1 million domains against the 1.3 million unique Shopify hosts my scanner found across 14 Common Crawl crawls. The join worked two ways: **exact matches** where the Shopify host matches the Tranco domain directly (e.g., `fashionnova.com`), and **subdomain matches** where a Shopify host sits under a Tranco domain (e.g., `shop.delta.com` under `delta.com`). After filtering noise domains (myshopify.com, cloudfront.net, generic ccTLD-like domains like uk.com), two very different patterns emerged.
+Shopify stores were identified using our own detection algorithm based on DNS and HTTP analysis, not BuiltWith or any third-party tool. The scanner processes Common Crawl's archived HTTP responses and flags hosts that match Shopify-specific patterns in DNS resolution and response headers. This produces a high-confidence list with very few false positives: if a host returns Shopify infrastructure headers, it's running on Shopify.
 
-Method in brief: the Shopify host list comes from HTTP-level Shopify detection in Common Crawl, not from BuiltWith-style fingerprinting. I normalized hosts, joined exact hostname matches directly, then separately checked whether a detected Shopify host was a subdomain of a Tranco-ranked parent. The point of the split is to separate Shopify-native sites from cases where Shopify is tucked behind a larger brand's main domain.
+I joined Tranco's top 1 million domains against the 1.3 million unique Shopify hosts my scanner found across 14 Common Crawl crawls. Before joining, hostnames are normalized by stripping `www.` prefixes. The join then works two ways: **exact matches** where the normalized Shopify host matches the Tranco domain directly (e.g., `fashionnova.com`), and **subdomain matches** where a Shopify host sits under a Tranco domain (e.g., `shop.delta.com` under `delta.com`). After filtering noise domains (myshopify.com, cloudfront.net, generic ccTLD-like domains like uk.com), two very different patterns emerged.
+
+```
+Shopify hosts (1.3M)          Tranco top 1M
+from CC WAT scan              domain rankings
+       |                            |
+       v                            |
+  normalize domains                 |
+  (strip www., filter noise)        |
+       |                            |
+       +----------+-----------------+
+                  |
+            join on domain
+                  |
+        +---------+---------+
+        v                   v
+   exact match         subdomain match
+  (host = domain)    (host under domain)
+```
 
 ## Two ways to use Shopify
 
