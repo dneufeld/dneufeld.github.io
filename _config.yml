@@ -1,0 +1,9 @@
+title: dneufeld
+description: Notes on Shopify, Common Crawl, and AI
+url: "https://dneufeld.github.io"
+baseurl: ""
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
+show_excerpts: false
