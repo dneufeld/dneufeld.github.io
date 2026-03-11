@@ -14,8 +14,23 @@ This repo is already configured as a public GitHub Pages user site at `https://d
 
 1. Add a new post under `_posts/` using Jekyll's `YYYY-MM-DD-title.md` naming convention.
 2. Add any supporting assets under `assets/`.
-3. Commit and push to `main`.
-4. GitHub Pages will rebuild the site automatically.
+3. If needed, update site-level config in `_config.yml`.
+4. Commit and push to `main`.
+5. GitHub Pages will rebuild the site automatically.
+
+## Optional integrations
+
+### Cloudflare Web Analytics
+
+This site has a conditional Cloudflare Web Analytics hook in `_includes/head.html`.
+
+To enable it:
+
+1. Create a Web Analytics site in Cloudflare and copy the token from their dashboard.
+2. Set `cloudflare_web_analytics_token` in `_config.yml`.
+3. Commit and push.
+
+The token is used in Cloudflare's standard beacon script and is public client-side data, not a secret.
 
 ## Setup notes
 
