@@ -1,28 +1,25 @@
 # dneufeld.github.io
 
-Minimal GitHub Pages blog scaffold for publishing the Shopify/Common Crawl posts in this repo.
+Minimal GitHub Pages blog scaffold for publishing exploration notes.
 
 ## What's here
 
 - Jekyll site configured for a GitHub Pages user site
-- Three posts imported from the draft branches
-- `assets/pipeline-diagram.svg` for the first post
+- A small set of published notes and supporting assets
+- A minimal structure that is easy to extend with new posts
 
-## Publish steps
+## Publishing workflow
 
-GitHub Docs currently require user sites to live in a public repo named `<owner>.github.io`, and Pages can publish from the root of a branch. GitHub also notes that Jekyll builds now run through GitHub Actions, so Actions must be enabled for the repo.
+This repo is already configured as a public GitHub Pages user site at `https://dneufeld.github.io/`.
 
-1. Re-authenticate GitHub CLI:
-   - `gh auth login -h github.com`
-2. Push this directory as a public repo:
-   - `cd /home/dneufeld/code/shopify-dataset-project/dneufeld.github.io`
-   - `gh repo create dneufeld.github.io --public --source=. --remote=origin --push`
-3. In GitHub repo settings:
-   - `Settings -> Pages -> Build and deployment -> Source -> Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/(root)`
+1. Add a new post under `_posts/` using Jekyll's `YYYY-MM-DD-title.md` naming convention.
+2. Add any supporting assets under `assets/`.
+3. Commit and push to `main`.
+4. GitHub Pages will rebuild the site automatically.
 
-After GitHub finishes the first build, the site should be available at `https://dneufeld.github.io/`.
+## Setup notes
+
+GitHub user sites must live in a public repo named `<owner>.github.io`, and Pages can publish from the root of a branch. GitHub also notes that Jekyll builds run through GitHub Actions, so Actions must be enabled for the repo.
 
 ## Sources
 
