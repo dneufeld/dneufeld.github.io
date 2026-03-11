@@ -18,6 +18,8 @@ I cross-referenced 1.3 million Shopify stores (detected by [scanning Common Craw
 
 I joined Tranco's top 1 million domains against the 1.3 million unique Shopify hosts my scanner found across 14 Common Crawl crawls. The join worked two ways: **exact matches** where the Shopify host matches the Tranco domain directly (e.g., `fashionnova.com`), and **subdomain matches** where a Shopify host sits under a Tranco domain (e.g., `shop.delta.com` under `delta.com`). After filtering noise domains (myshopify.com, cloudfront.net, generic ccTLD-like domains like uk.com), two very different patterns emerged.
 
+Method in brief: the Shopify host list comes from HTTP-level Shopify detection in Common Crawl, not from BuiltWith-style fingerprinting. I normalized hosts, joined exact hostname matches directly, then separately checked whether a detected Shopify host was a subdomain of a Tranco-ranked parent. The point of the split is to separate Shopify-native sites from cases where Shopify is tucked behind a larger brand's main domain.
+
 ## Two ways to use Shopify
 
 ```
@@ -42,7 +44,7 @@ Here's how those two patterns break down across Tranco rankings:
 | Top 10,000 | 12 | 220 |
 | Top 100,000 | 907 | 1,763 |
 
-Zero. Not a single Shopify-native brand cracks the top 1,000 most popular websites. But 30 of the top 1,000 websites run Shopify stores on their subdomains. At the top of the web, Shopify is everywhere and nowhere: powering commerce for massive brands while remaining invisible to the typical "who uses Shopify?" conversation.
+Zero. Not a single Shopify-native brand cracks the top 1,000 most popular websites. But 30 of the top 1,000 websites run Shopify stores on their subdomains. At the top of the web, Shopify is everywhere and nowhere: powering commerce for massive brands while remaining mostly invisible to the typical "who uses Shopify?" conversation.
 
 ## The names
 
@@ -171,3 +173,5 @@ Fashion Nova, arguably Shopify's most famous store, ranks #9,909. Meanwhile, 30 
 Shopify's public story is about empowering entrepreneurs. Their investor materials highlight merchant count and GMV growth. But the data shows a parallel enterprise story that's much less visible: the world's biggest brands using Shopify as invisible commerce infrastructure.
 
 This matters for how you think about the platform. When Ring (Amazon) runs 15 regional stores on Shopify, that's not a DTC play. It's a Fortune 500 company choosing Shopify as its global commerce backend for a product line. When Ford runs separate dealer merch and employee merch stores, that's enterprise procurement. When the European Space Agency, NYC.gov, and the UNDP all independently land on Shopify, that's a signal about where institutional commerce defaults are heading.
+
+This is not a claim that Shopify powers the main experience on all of these domains. In many cases the main site is clearly custom or runs on a different stack, and Shopify is being used for a specific store, merch flow, or regional commerce surface. That's the point: the platform's presence is much broader than the usual DTC examples, but often in a hidden supporting role rather than as the whole website.

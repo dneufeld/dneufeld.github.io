@@ -16,6 +16,8 @@ I expected Fashion Nova, Allbirds, maybe Kylie Cosmetics. I was wrong.
 
 I took the 14,500 domains where a Shopify store is the entire website and ranked them by [Tranco](https://tranco-list.eu/), a research-grade popularity ranking that combines DNS traffic (Cloudflare Radar, Cisco Umbrella), real browser usage (Chrome UX Report), and passive DNS (Farsight), averaged over 30 days.
 
+Method in brief: this is the subset of detected Shopify hosts where the storefront appears to be the primary site on that domain, not a Shopify store tucked under a larger non-Shopify parent. I used Tranco for the initial ranking, then pulled the underlying source lists to see whether the South Asian result was broad-based or driven by one component.
+
 Here are the top 50:
 
 | # | Domain | Tranco rank | Region |
@@ -75,7 +77,7 @@ Fashion Nova is #12. Alo Yoga is #21. The names most people associate with Shopi
 
 ## Is the ranking wrong?
 
-My first reaction was skepticism. Tranco is a composite — maybe one of its sources has a bias toward South Asian domains? I downloaded the four individual rankings that feed into Tranco and cross-referenced them.
+My first reaction was skepticism. Tranco is a composite - maybe one of its sources has a bias toward South Asian domains? I downloaded the four individual rankings that feed into Tranco and cross-referenced them.
 
 | Source | What it measures | How it ranks |
 |--------|-----------------|-------------|
@@ -107,15 +109,15 @@ Out of 475 South Asian domains in our dataset, only 5 (1%) appear in Cisco Umbre
 
 ## The traffic is real
 
-CrUX is the most trustworthy signal here. It measures actual page loads from opted-in Chrome users — no DNS resolver bias, no backlink games. Chrome has roughly 65% market share in India and 45% in Pakistan.
+CrUX is the most direct signal here. It measures actual page loads from opted-in Chrome users, so it avoids the resolver-adoption issues in DNS-based rankings and the link-graph bias in backlink-based ones. It is still Chrome-only and opt-in, but for this question it is much closer to user behavior than the other sources.
 
-The reason these brands are invisible on everything else:
+The reason these brands are mostly invisible on everything else:
 
 - **Cisco Umbrella** runs on OpenDNS resolvers, which have negligible adoption in South Asia
 - **Majestic** measures backlinks from the broader web — South Asian shopping sites have almost no inbound links from English-language websites
 - **Cloudflare Radar** (1.1.1.1) is popular in South Asia for general DNS, but individual shopping sites don't generate enough query volume to crack its rankings
 
-CrUX is the only ranking that captures what people in India and Pakistan are actually doing in their browsers. And what they're doing is shopping on these Shopify stores.
+CrUX is the only source in this comparison that consistently captures what people in India and Pakistan are doing in their browsers. And what it shows is meaningful traffic to these Shopify stores.
 
 ## What these stores actually are
 
@@ -170,7 +172,7 @@ Shopify's merchant base is genuinely global. But you'd never know it from Wester
 
 ## What this tells us about measuring the web
 
-Web popularity rankings have a structural blind spot. Three of Tranco's four sources are DNS-based, and DNS resolver adoption varies dramatically by region. One source is backlink-based, and backlinks reflect the English-language web's link structure. CrUX is the only source that actually measures what users do in their browsers regardless of geography.
+Web popularity rankings have a structural blind spot. Three of Tranco's four sources are DNS-based, and DNS resolver adoption varies dramatically by region. One source is backlink-based, and backlinks reflect the English-language web's link structure. In this comparison, CrUX is the only source that directly measures what users do in their browsers regardless of geography.
 
 The result: a Pakistani footwear chain with 250 physical stores and 50 years of history is invisible to most ranking systems. A Tata Group subsidiary with $2 billion in revenue doesn't show up on Cisco Umbrella. India's largest wearable brand, preparing for a billion-dollar IPO, has no Majestic backlink profile to speak of.
 
