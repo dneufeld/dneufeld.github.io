@@ -14,17 +14,10 @@ GitHub Docs currently require user sites to live in a public repo named `<owner>
 
 1. Re-authenticate GitHub CLI:
    - `gh auth login -h github.com`
-2. Create the public repo on GitHub:
-   - `gh repo create dneufeld.github.io --public`
-3. Initialize and push this directory as its own repo:
+2. Push this directory as a public repo:
    - `cd /home/dneufeld/code/shopify-dataset-project/dneufeld.github.io`
-   - `git init`
-   - `git add .`
-   - `git commit -m "Initial GitHub Pages blog"`
-   - `git branch -M main`
-   - `git remote add origin https://github.com/dneufeld/dneufeld.github.io.git`
-   - `git push -u origin main`
-4. In GitHub repo settings:
+   - `gh repo create dneufeld.github.io --public --source=. --remote=origin --push`
+3. In GitHub repo settings:
    - `Settings -> Pages -> Build and deployment -> Source -> Deploy from a branch`
    - Branch: `main`
    - Folder: `/(root)`
