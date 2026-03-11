@@ -22,26 +22,47 @@ Before any of that analysis, though, I needed to know what was actually in Commo
 
 Common Crawl stores its data in three formats. A single crawl has about 100,000 files of each, totaling several hundred terabytes.
 
-```
-WARC (Web ARChive)              WAT (Web Archive Transformation)   WET (Web Extract Text)
-Full HTTP responses             Extracted metadata                  Plain text only
-┌─────────────────────┐         ┌─────────────────────┐            ┌──────────────────┐
-│ HTTP/1.1 200 OK     │         │ url: store.com/...  │            │ Welcome to our   │
-│ X-ShopId: 12345     │         │ status: 200         │            │ store! We sell   │
-│ Content-Type: html  │         │ headers:            │            │ handmade candles │
-│                     │         │   X-ShopId: 12345   │            │ from organic...  │
-│ <html>              │         │   Content-Type: html│            │                  │
-│ <head>...</head>    │         │ links: [...]        │            │ Featured:        │
-│ <body>              │         │ meta: [...]         │            │   Lavender Dream │
-│   Full page HTML... │         │ warc_offset: 84231  │            │   Cedar & Sage   │
-│ </body></html>      │         │ warc_length: 52418  │            │   ...            │
-└─────────────────────┘         └─────────────────────┘            └──────────────────┘
-~300 TB per crawl               ~50 GB per crawl                   ~25 GB per crawl
+```text
+WARC (Web ARChive)            WAT (Web Archive Transformation)   WET (Web Extract Text)
+Full HTTP responses           Extracted metadata                  Plain text only
+
++-----------------------+    +--------------------------+    +----------------------+
+| HTTP/1.1 200 OK       |    | url: store.com/...       |    | Welcome to our       |
+| X-ShopId: 12345       |    | status: 200              |    | store! We sell       |
+| Content-Type: html    |    | headers:                 |    | handmade candles     |
+|                       |    |   X-ShopId: 12345        |    | from organic...      |
+| <html>                |    |   Content-Type: html     |    |                      |
+| <head>...</head>      |    | links: [...]             |    | Featured:            |
+| <body>                |    | meta: [...]              |    |   Lavender Dream     |
+|   Full page HTML...   |    | warc_offset: 84231       |    |   Cedar & Sage       |
+| </body></html>        |    | warc_length: 52418       |    |   ...                |
++-----------------------+    +--------------------------+    +----------------------+
+~300 TB per crawl            ~50 GB per crawl              ~25 GB per crawl
 ```
 
 The key design decision was splitting the work into two stages:
 
-![Two-stage Common Crawl pipeline](/assets/pipeline-diagram.svg)
+```text
+Stage 1: WAT scan
+
++----------------------+    +----------------------+    +----------------------+
+| Common Crawl WAT     | -> | Detect Shopify       | -> | Parquet registry     |
+| ~100K files/crawl    |    | + save WARC offsets  |    | + WARC coordinates   |
++----------------------+    +----------------------+    +----------------------+
+
+Stage 2: WARC fetch
+
++----------------------+    +----------------------+    +----------------------+
+| Parquet registry     | -> | Byte-range fetch     | -> | Full HTML + fields   |
+| offset + length      |    | skip ~95% of data    |    | products, apps, etc. |
++----------------------+    +----------------------+    +----------------------+
+                                                            |
+                                                            v
+                                                  +----------------------+
+                                                  | Host Crawl Summary   |
+                                                  | 1 row / host / crawl |
+                                                  +----------------------+
+```
 
 **Why split it?** Cost. WAT files are ~50GB compressed per crawl, small enough to stream through entirely. WARC files are the full page content: ~300TB per crawl. Scanning WAT first lets us identify the ~5% of records that are Shopify, save their exact byte offsets, and then surgically fetch only those records from the WARC files later. Without this split, we'd need to download and scan hundreds of terabytes to find our needle.
 
@@ -49,32 +70,43 @@ The whole thing runs on EC2 spot instances in us-east-1 (same region as Common C
 
 The output is a set of Parquet datasets on S3, queryable with Athena:
 
-| Dataset | What it contains | Rows | Size |
-|---------|-----------------|------|------|
-| **WAT Store Registry** | One row per Shopify page detected. Hostname, URL, confidence score, signals, shop ID, plus the WARC filename/offset/length needed to fetch full content later. Partitioned by crawl. | 1.74B | 1.88 TB |
-| **Host Crawl Summary** | One row per unique host per crawl. Aggregated confidence, record counts, infrastructure info (IP, data center, shard). Powers most of the analysis below. | ~13M | ~200 MB |
-| **WARC Content** *(in progress)* | Full HTML + extracted fields (products, apps, theme info) for each Shopify page. Fetched via byte-range requests using the offsets from the WAT scan. | ~168M/dense, ~11M/sparse | ~12 TB/dense, ~700 GB/sparse |
+```text
+Dataset            | What it contains                                          | Rows         | Size
+-------------------+------------------------------------------------------------+--------------+------------------------
+WAT Store Registry | One row per Shopify page detected. Hostname, URL,          | 1.74B        | 1.88 TB
+                   | confidence score, signals, shop ID, plus the WARC          |              |
+                   | filename/offset/length needed to fetch full content later. |              |
+                   | Partitioned by crawl.                                      |              |
+Host Crawl Summary | One row per unique host per crawl. Aggregated confidence,  | ~13M         | ~200 MB
+                   | record counts, infrastructure info (IP, data center,       |              |
+                   | shard). Powers most of the analysis below.                 |              |
+WARC Content       | Full HTML plus extracted fields (products, apps, theme     | ~168M/dense  | ~12 TB/dense
+(in progress)      | info) for each Shopify page. Fetched via byte-range       | ~11M/sparse  | ~700 GB/sparse
+                   | requests using the offsets from the WAT scan.              |              |
+```
 
 ## The drop
 
 Here's what each crawl produced:
 
-| Crawl | Month | Pages scanned | Shopify hosts found |
-|-------|-------|---------------|---------------------|
-| CC-MAIN-2025-05 | Jan 2025 | 3.0B | 1,174,823 |
-| CC-MAIN-2025-08 | Feb 2025 | 2.6B | 1,183,142 |
-| CC-MAIN-2025-13 | Mar 2025 | 2.7B | 1,217,124 |
-| CC-MAIN-2025-18 | Apr 2025 | 2.7B | 1,234,359 |
-| CC-MAIN-2025-21 | May 2025 | 2.5B | 1,241,117 |
-| CC-MAIN-2025-26 | Jun 2025 | 2.4B | 1,222,303 |
-| CC-MAIN-2025-30 | Jul 2025 | 2.4B | 1,301,076 |
-| CC-MAIN-2025-33 | Aug 2025 | 2.4B | 1,298,478 |
-| CC-MAIN-2025-38 | Sep 2025 | 2.4B | 1,293,986 |
-| CC-MAIN-2025-43 | Oct 2025 | 2.6B | 1,305,319 |
-| CC-MAIN-2025-47 | Nov 2025 | 2.3B | 530,237 |
-| CC-MAIN-2025-51 | Dec 2025 | 2.2B | 511,680 |
-| CC-MAIN-2026-04 | Jan 2026 | 2.3B | 475,236 |
-| CC-MAIN-2026-08 | Feb 2026 | 2.1B | 451,255 |
+```text
+Crawl            | Month    | Pages scanned | Shopify hosts found
+-----------------+----------+---------------+---------------------
+CC-MAIN-2025-05  | Jan 2025 | 3.0B          | 1,174,823
+CC-MAIN-2025-08  | Feb 2025 | 2.6B          | 1,183,142
+CC-MAIN-2025-13  | Mar 2025 | 2.7B          | 1,217,124
+CC-MAIN-2025-18  | Apr 2025 | 2.7B          | 1,234,359
+CC-MAIN-2025-21  | May 2025 | 2.5B          | 1,241,117
+CC-MAIN-2025-26  | Jun 2025 | 2.4B          | 1,222,303
+CC-MAIN-2025-30  | Jul 2025 | 2.4B          | 1,301,076
+CC-MAIN-2025-33  | Aug 2025 | 2.4B          | 1,298,478
+CC-MAIN-2025-38  | Sep 2025 | 2.4B          | 1,293,986
+CC-MAIN-2025-43  | Oct 2025 | 2.6B          | 1,305,319
+CC-MAIN-2025-47  | Nov 2025 | 2.3B          |   530,237
+CC-MAIN-2025-51  | Dec 2025 | 2.2B          |   511,680
+CC-MAIN-2026-04  | Jan 2026 | 2.3B          |   475,236
+CC-MAIN-2026-08  | Feb 2026 | 2.1B          |   451,255
+```
 
 January through October 2025, the numbers are stable: roughly 1.2-1.3 million unique Shopify hosts per crawl. I've been calling these the **Shopify-dense crawls**.
 
@@ -88,18 +120,22 @@ The two-stage pipeline split paid off here. A dense crawl has ~168M Shopify reco
 
 To check whether the dense pattern was normal or anomalous, I took the Shopify hosts my scanner found across the 14 crawls and looked them up in [Common Crawl's index](https://index.commoncrawl.org/) (ccindex) going back to 2023. ccindex has hostname-level data for all crawls, so I could check how many of my known Shopify hosts appeared in each historical crawl and how many pages CC had for them. (Selected crawls shown, roughly one per quarter.)
 
-| Crawl | Month | Known Shopify hosts in crawl | Pages crawled | Pages/host |
-|-------|-------|------------------------------|--------------|-----------|
-| CC-MAIN-2023-06 | Jan 2023 | 494,623 | 119,949,903 | 242 |
-| CC-MAIN-2023-40 | Sep 2023 | 569,910 | 152,527,949 | 268 |
-| CC-MAIN-2024-10 | Feb 2024 | 714,229 | 146,152,846 | 205 |
-| CC-MAIN-2024-30 | Jul 2024 | 904,687 | 129,811,540 | 144 |
-| CC-MAIN-2024-51 | Dec 2024 | 1,052,755 | 154,145,907 | 146 |
-| CC-MAIN-2025-05 | Jan 2025 | 1,076,271 | 194,497,145 | 181 |
-| CC-MAIN-2025-43 | Oct 2025 | 1,147,731 | 175,100,841 | 153 |
-| **CC-MAIN-2025-47** | **Nov 2025** | **438,066** | **13,968,912** | **32** |
-| **CC-MAIN-2025-51** | **Dec 2025** | **407,336** | **13,396,375** | **33** |
-| **CC-MAIN-2026-04** | **Jan 2026** | **370,762** | **14,249,308** | **38** |
+```text
+Sparse-era rows start at CC-MAIN-2025-47.
+
+Crawl            | Month    | Known Shopify hosts | Pages crawled | Pages/host
+-----------------+----------+---------------------+---------------+-----------
+CC-MAIN-2023-06  | Jan 2023 |             494,623 |   119,949,903 |       242
+CC-MAIN-2023-40  | Sep 2023 |             569,910 |   152,527,949 |       268
+CC-MAIN-2024-10  | Feb 2024 |             714,229 |   146,152,846 |       205
+CC-MAIN-2024-30  | Jul 2024 |             904,687 |   129,811,540 |       144
+CC-MAIN-2024-51  | Dec 2024 |           1,052,755 |   154,145,907 |       146
+CC-MAIN-2025-05  | Jan 2025 |           1,076,271 |   194,497,145 |       181
+CC-MAIN-2025-43  | Oct 2025 |           1,147,731 |   175,100,841 |       153
+CC-MAIN-2025-47  | Nov 2025 |             438,066 |    13,968,912 |        32
+CC-MAIN-2025-51  | Dec 2025 |             407,336 |    13,396,375 |        33
+CC-MAIN-2026-04  | Jan 2026 |             370,762 |    14,249,308 |        38
+```
 
 The pattern was consistent for at least three years. Coverage of these hosts was steadily *growing*, from 495K in early 2023 to 1.15M by October 2025. Pages per host ranged from 140 to 270.
 
@@ -111,27 +147,32 @@ Then at CC-MAIN-2025-47, both metrics fell off a cliff simultaneously. Hosts dro
 
 I investigated in two stages. First, I cross-referenced the full population against Common Crawl's index to determine *why* each host was missing:
 
-| Category | Count | % | What it means |
-|----------|------:|--:|---------------|
-| CC stopped crawling entirely | 723,181 | 94.2% | Not in CC's crawl at all |
-| CC crawled, but Shopify not detected | 35,375 | 4.6% | Possible detection gap or store changed |
-| Root domain still present under different hostname | 9,246 | 1.2% | e.g., `www.store.com` survived but `store.com` didn't |
+```text
+Category                                 | Count   | %    | What it means
+-----------------------------------------+---------+------+--------------------------------------------
+CC stopped crawling entirely             | 723,181 | 94.2 | Not in CC's crawl at all
+CC crawled, but Shopify not detected     |  35,375 |  4.6 | Possible detection gap or store changed
+Root domain still present on other host  |   9,246 |  1.2 | Example: www.store.com survived, store.com
+                                         |         |      | did not
+```
 
 94% of missing hosts simply aren't being crawled by Common Crawl anymore. The 4.6% "crawled but not detected" gap likely includes stores that were temporarily down during the crawl, migrated to headless frontends, or were crawled on a URL that doesn't carry Shopify signals.
 
-Then I verified the 723K hosts that CC stopped crawling — not a sample, the full population. I ran DNS resolution on every host and followed up with HTTP probes on the ones that still pointed to Shopify's IP range:
+Then I verified the 723K hosts that CC stopped crawling - not a sample, the full population. I ran DNS resolution on every host and followed up with HTTP probes on the ones that still pointed to Shopify's IP range:
 
-| Category | Count | % | Description |
-|----------|------:|--:|-------------|
-| active_shopify | 479,533 | 66.9% | Still on Shopify, CC just stopped crawling them |
-| migrated | 63,159 | 8.8% | DNS points to non-Shopify IP |
-| dead | 56,459 | 7.9% | Domain expired, no DNS record |
-| churned_404 | 40,558 | 5.7% | Deactivated store |
-| churned_402 | 39,368 | 5.5% | Suspended (unpaid) |
-| blocked | 33,481 | 4.7% | 403 without Shopify headers |
-| churned_other | 2,767 | 0.4% | Other inactive states |
-| inactive_shopify | 1,089 | 0.2% | Shopify IP, not serving |
-| rate_limited | 108 | 0.0% | Inconclusive (429/503) |
+```text
+Category         | Count   | %    | Description
+-----------------+---------+------+-----------------------------------------------
+active_shopify   | 479,533 | 66.9 | Still on Shopify, CC just stopped crawling
+migrated         |  63,159 |  8.8 | DNS points to non-Shopify IP
+dead             |  56,459 |  7.9 | Domain expired, no DNS record
+churned_404      |  40,558 |  5.7 | Deactivated store
+churned_402      |  39,368 |  5.5 | Suspended (unpaid)
+blocked          |  33,481 |  4.7 | 403 without Shopify headers
+churned_other    |   2,767 |  0.4 | Other inactive states
+inactive_shopify |   1,089 |  0.2 | Shopify IP, not serving
+rate_limited     |     108 |  0.0 | Inconclusive (429/503)
+```
 
 **Two thirds of the "missing" hosts are still active Shopify stores.** They return 200s, serve Shopify headers, and are ready to sell — Common Crawl just stopped visiting them. The true churn (dead + migrated + suspended + deactivated) accounts for about 31% of the missing population, which is what you'd expect from normal store turnover over a few months.
 
@@ -154,12 +195,14 @@ The practical effect: the long tail got cut. Independent merchants with a custom
 
 Even for stores that remained in the sparse crawls, coverage got much shallower:
 
-| Records per host | Dense (Oct 2025) | Sparse (Nov 2025) |
-|-----------------|-----------------|-------------------|
-| 1 page | ~15% | ~52% |
-| 2-10 pages | ~25% | ~35% |
-| 11-100 pages | ~30% | ~12% |
-| 100+ pages | ~30% | ~1% |
+```text
+Records per host | Dense (Oct 2025) | Sparse (Nov 2025)
+-----------------+------------------+-------------------
+1 page           | ~15%             | ~52%
+2-10 pages       | ~25%             | ~35%
+11-100 pages     | ~30%             | ~12%
+100+ pages       | ~30%             | ~1%
+```
 
 In dense crawls, Common Crawl would index many URLs per store: product pages, collection pages, locale variants (English, French, German versions of each page). In sparse crawls, over half the surviving stores have just a single page crawled. Most stores went from having their full catalog indexed to having one or two product pages.
 
