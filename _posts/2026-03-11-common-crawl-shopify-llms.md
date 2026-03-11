@@ -45,23 +45,25 @@ The key design decision was splitting the work into two stages:
 ```text
 Stage 1: WAT scan
 
-+----------------------+    +----------------------+    +----------------------+
-| Common Crawl WAT     | -> | Detect Shopify       | -> | Parquet registry     |
-| ~100K files/crawl    |    | + save WARC offsets  |    | + WARC coordinates   |
-+----------------------+    +----------------------+    +----------------------+
++--------------------------+    +--------------------------+    +--------------------------+
+| Common Crawl            | -> | Shopify Signal          | -> | Parquet Dataset         |
+| WAT S3 bucket           |    | Detection               |    | + WARC offsets          |
+| ~2.5B records / crawl   |    | ~100K files / crawl     |    | ~125M records / crawl  |
++--------------------------+    +--------------------------+    +--------------------------+
 
 Stage 2: WARC fetch
 
-+----------------------+    +----------------------+    +----------------------+
-| Parquet registry     | -> | Byte-range fetch     | -> | Full HTML + fields   |
-| offset + length      |    | skip ~95% of data    |    | products, apps, etc. |
-+----------------------+    +----------------------+    +----------------------+
-                                                            |
-                                                            v
-                                                  +----------------------+
-                                                  | Host Crawl Summary   |
-                                                  | 1 row / host / crawl |
-                                                  +----------------------+
++--------------------------+    +--------------------------+    +--------------------------+
+| Parquet with            | -> | Byte-range fetch        | -> | Full HTML +             |
+| WARC coordinates        |    | from Common Crawl's S3  |    | extracted fields        |
+| offset + length         |    | skip 95% of data        |    | products, apps, etc.    |
++--------------------------+    +--------------------------+    +--------------------------+
+                                                                                 |
+                                                                                 v
+                                                                  +--------------------------+
+                                                                  | Host Crawl Summary       |
+                                                                  | 1 row per host per crawl |
+                                                                  +--------------------------+
 ```
 
 **Why split it?** Cost. WAT files are ~50GB compressed per crawl, small enough to stream through entirely. WARC files are the full page content: ~300TB per crawl. Scanning WAT first lets us identify the ~5% of records that are Shopify, save their exact byte offsets, and then surgically fetch only those records from the WARC files later. Without this split, we'd need to download and scan hundreds of terabytes to find our needle.
