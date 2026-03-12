@@ -3,6 +3,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {%- seo -%}
+  {%- assign page_description = page.description | default: site.description -%}
+  {%- if page_description and page_description != "" -%}
+  <meta name="twitter:description" content="{{ page_description | escape }}">
+  {%- endif -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   {%- feed_meta -%}
   {%- if site.cloudflare_web_analytics_token and site.cloudflare_web_analytics_token != "" -%}
