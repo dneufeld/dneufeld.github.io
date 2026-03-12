@@ -18,6 +18,40 @@ This repo is already configured as a public GitHub Pages user site at `https://d
 4. Commit and push to `main`.
 5. GitHub Pages will rebuild the site automatically.
 
+## Post contract
+
+Each post must set explicit front matter for the metadata we care about in social previews:
+
+```yaml
+---
+layout: post
+title: "Your post title"
+permalink: /your-slug/
+description: "The exact sentence that should appear in Slack or other unfurls."
+---
+```
+
+Rules:
+
+- `description` is the canonical preview text. Do not rely on the first paragraph or excerpt fallback.
+- Keep disclaimer text out of `description`.
+- If a post needs a legal disclosure, put it in the body, not in the preview sentence.
+
+## Local checks
+
+Build the site, then validate the rendered HTML contract:
+
+```bash
+bundle exec jekyll build --future
+python3 script/validate_site_contract.py
+```
+
+The validator checks:
+
+- required post front matter (`layout`, `title`, `permalink`, `description`)
+- rendered `meta description`, `og:title`, `og:description`, `twitter:description`, and canonical URL
+- the Cloudflare Web Analytics beacon snippet and configured token on every built post
+
 ## Optional integrations
 
 ### Cloudflare Web Analytics
