@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f1113" />
+  <rect x="36" y="36" width="1128" height="558" rx="20" fill="#171a1d" stroke="#343a42" stroke-width="2" />
+
+  <text x="72" y="92" fill="#8ab8ff" font-size="20" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">dneufeld notes</text>
+  <text x="72" y="122" fill="#aaa39a" font-size="18" font-family="'DejaVu Sans', Verdana, sans-serif">Shopify x Tranco overlay</text>
+
+  <text x="72" y="188" fill="#e8e5e0" font-size="56" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">THE MOST-VISITED</text>
+  <text x="72" y="248" fill="#e8e5e0" font-size="56" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">SHOPIFY STORES</text>
+  <text x="72" y="308" fill="#e8e5e0" font-size="56" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">AREN'T THE ONES</text>
+  <text x="72" y="368" fill="#e8e5e0" font-size="56" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">YOU THINK</text>
+
+  <text x="72" y="424" fill="#aaa39a" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif">1.3M Shopify hosts, CC-MAIN-2025-43</text>
+  <text x="72" y="458" fill="#aaa39a" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif">joined against the Tranco top 1M</text>
+
+  <rect x="786" y="92" width="322" height="174" rx="18" fill="#0f1113" stroke="#343a42" stroke-width="2" />
+  <text x="816" y="136" fill="#e8e5e0" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">TOP 1K OVERLAP</text>
+  <text x="816" y="190" fill="#6eccaf" font-size="22" font-family="'DejaVu Sans Mono', monospace" font-weight="700">exact</text>
+  <text x="1050" y="190" fill="#e8e5e0" font-size="36" font-family="'DejaVu Sans Mono', monospace" text-anchor="end">0</text>
+  <text x="816" y="246" fill="#e8a87c" font-size="22" font-family="'DejaVu Sans Mono', monospace" font-weight="700">subdomain</text>
+  <text x="1050" y="246" fill="#e8e5e0" font-size="36" font-family="'DejaVu Sans Mono', monospace" text-anchor="end">30</text>
+
+  <rect x="72" y="514" width="468" height="54" rx="12" fill="#0f1113" stroke="#6eccaf" stroke-width="2" />
+  <text x="96" y="549" fill="#6eccaf" font-size="22" font-family="'DejaVu Sans Mono', monospace" font-weight="700">EXACT</text>
+  <text x="210" y="549" fill="#e8e5e0" font-size="22" font-family="'DejaVu Sans Mono', monospace">wyze.com  stylo.pk</text>
+
+  <rect x="564" y="514" width="564" height="54" rx="12" fill="#0f1113" stroke="#e8a87c" stroke-width="2" />
+  <text x="588" y="549" fill="#e8a87c" font-size="22" font-family="'DejaVu Sans Mono', monospace" font-weight="700">SUBDOMAIN</text>
+  <text x="782" y="549" fill="#e8e5e0" font-size="22" font-family="'DejaVu Sans Mono', monospace">shop.x.com  shop.delta.com</text>
+
+  <text x="72" y="586" fill="#aaa39a" font-size="18" font-family="'DejaVu Sans', Verdana, sans-serif">dneufeld.github.io / most-visited-shopify-stores</text>
+</svg>

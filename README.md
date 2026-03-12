@@ -28,12 +28,14 @@ layout: post
 title: "Your post title"
 permalink: /your-slug/
 description: "The exact sentence that should appear in Slack or other unfurls."
+image: /assets/your-social-card.png
 ---
 ```
 
 Rules:
 
 - `description` is the canonical preview text. Do not rely on the first paragraph or excerpt fallback.
+- `image` should point to an explicit social card asset for the post. Do not rely on a generic default if the post has a chart, diagram, or strong headline.
 - Keep disclaimer text out of `description`.
 - If a post needs a legal disclosure, put it in the body, not in the preview sentence.
 
@@ -48,8 +50,8 @@ python3 script/validate_site_contract.py
 
 The validator checks:
 
-- required post front matter (`layout`, `title`, `permalink`, `description`)
-- rendered `meta description`, `og:title`, `og:description`, `twitter:description`, and canonical URL
+- required post front matter (`layout`, `title`, `permalink`, `description`, `image`)
+- rendered `meta description`, `og:title`, `og:description`, `og:image`, `twitter:description`, and canonical URL
 - the Cloudflare Web Analytics beacon snippet and configured token on every built post
 
 ## Optional integrations

@@ -4,8 +4,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {%- seo -%}
   {%- assign page_description = page.description | default: site.description -%}
+  {%- assign page_image = page.image | default: "" -%}
   {%- if page_description and page_description != "" -%}
   <meta name="twitter:description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  {%- if page_image != "" -%}
+  <meta property="og:image" content="{{ page_image | absolute_url | escape }}">
+  <meta name="twitter:image" content="{{ page_image | absolute_url | escape }}">
   {%- endif -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   {%- feed_meta -%}

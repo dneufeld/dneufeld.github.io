@@ -138,7 +138,7 @@ def post_output_paths(permalink: str) -> list[Path]:
 
 def validate_front_matter(path: Path, front_matter: dict[str, str]) -> list[ValidationError]:
     errors: list[ValidationError] = []
-    required = ("layout", "title", "permalink", "description")
+    required = ("layout", "title", "permalink", "description", "image")
 
     for field in required:
         value = front_matter.get(field, "").strip()
@@ -176,11 +176,17 @@ def validate_built_output(
     expected_description = normalize_text(front_matter["description"])
     expected_title = normalize_text(front_matter["title"])
     expected_canonical = f"{site_url.rstrip('/')}{front_matter['permalink']}"
+    image_value = front_matter["image"].strip()
+    if image_value.startswith(("http://", "https://")):
+        expected_image = image_value
+    else:
+        expected_image = f"{site_url.rstrip('/')}/{image_value.lstrip('/')}"
 
     rendered_description = normalize_text(parser.meta_content(name="description"))
     rendered_og_description = normalize_text(parser.meta_content(property_name="og:description"))
     rendered_twitter_description = normalize_text(parser.meta_content(name="twitter:description"))
     rendered_og_title = normalize_text(parser.meta_content(property_name="og:title"))
+    rendered_og_image = normalize_text(parser.meta_content(property_name="og:image"))
     rendered_canonical = normalize_text(parser.canonical_href())
     rendered_og_url = normalize_text(parser.meta_content(property_name="og:url"))
 
@@ -195,6 +201,9 @@ def validate_built_output(
 
     if rendered_og_title != expected_title:
         errors.append(ValidationError(path, "og:title does not match front matter title"))
+
+    if rendered_og_image != expected_image:
+        errors.append(ValidationError(path, "og:image does not match front matter image"))
 
     if rendered_canonical != expected_canonical:
         errors.append(ValidationError(path, "canonical URL does not match site URL + permalink"))
