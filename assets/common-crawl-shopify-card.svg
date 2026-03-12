@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f1113" />
+  <rect x="36" y="36" width="1128" height="558" rx="20" fill="#171a1d" stroke="#343a42" stroke-width="2" />
+
+  <text x="72" y="92" fill="#8ab8ff" font-size="20" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">dneufeld notes</text>
+  <text x="72" y="122" fill="#aaa39a" font-size="18" font-family="'DejaVu Sans', Verdana, sans-serif">Common Crawl x Shopify</text>
+
+  <text x="72" y="180" fill="#e8e5e0" font-size="50" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">COMMON CRAWL</text>
+  <text x="72" y="236" fill="#e8e5e0" font-size="50" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">STOPPED VISITING</text>
+  <text x="72" y="292" fill="#e8e5e0" font-size="50" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">HUNDREDS OF</text>
+  <text x="72" y="348" fill="#e8e5e0" font-size="50" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">THOUSANDS OF</text>
+  <text x="72" y="404" fill="#e8e5e0" font-size="50" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">SHOPIFY STORES</text>
+
+  <text x="72" y="456" fill="#aaa39a" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif">34.6B pages scanned across 14 crawls</text>
+  <text x="72" y="490" fill="#aaa39a" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif">Coverage was stable, then fell off a cliff.</text>
+
+  <rect x="746" y="98" width="344" height="324" rx="18" fill="#0f1113" stroke="#343a42" stroke-width="2" />
+  <text x="776" y="144" fill="#e8e5e0" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">Shopify hosts per crawl</text>
+
+  <text x="776" y="212" fill="#6eccaf" font-size="20" font-family="'DejaVu Sans Mono', monospace" font-weight="700">CC-MAIN-2025-43</text>
+  <text x="1056" y="212" fill="#e8e5e0" font-size="34" font-family="'DejaVu Sans Mono', monospace" text-anchor="end">1.30M</text>
+
+  <line x1="776" y1="250" x2="1056" y2="250" stroke="#343a42" stroke-width="2" stroke-dasharray="8 8" />
+
+  <text x="776" y="302" fill="#e8a87c" font-size="20" font-family="'DejaVu Sans Mono', monospace" font-weight="700">CC-MAIN-2025-47</text>
+  <text x="1056" y="302" fill="#e8e5e0" font-size="34" font-family="'DejaVu Sans Mono', monospace" text-anchor="end">530K</text>
+
+  <text x="776" y="360" fill="#e8a87c" font-size="20" font-family="'DejaVu Sans Mono', monospace" font-weight="700">CC-MAIN-2026-08</text>
+  <text x="1056" y="360" fill="#e8e5e0" font-size="34" font-family="'DejaVu Sans Mono', monospace" text-anchor="end">451K</text>
+
+  <rect x="776" y="388" width="280" height="70" rx="12" fill="#171a1d" stroke="#e8a87c" stroke-width="2" />
+  <text x="916" y="432" fill="#e8a87c" font-size="30" font-family="'DejaVu Sans Mono', monospace" font-weight="700" text-anchor="middle">65% DROP</text>
+
+  <rect x="72" y="514" width="1018" height="52" rx="12" fill="#0f1113" stroke="#343a42" stroke-width="2" />
+  <text x="96" y="548" fill="#e8e5e0" font-size="22" font-family="'DejaVu Sans Mono', monospace">dense crawls: ~1.2M-1.3M hosts   sparse crawls: ~450K-530K</text>
+
+  <text x="72" y="586" fill="#aaa39a" font-size="18" font-family="'DejaVu Sans', Verdana, sans-serif">dneufeld.github.io / common-crawl-shopify-llms</text>
+</svg>
