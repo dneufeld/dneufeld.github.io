@@ -3,6 +3,7 @@ layout: post
 title: "I Scanned 34.6 Billion Web Pages and Found Shopify Disappearing from Common Crawl"
 permalink: /common-crawl-shopify-llms/
 description: "I scanned 34.6 billion pages and found Common Crawl's Shopify coverage dropped sharply in late 2025."
+image: /assets/pipeline-diagram.png
 ---
 
 *Disclosure: I'm a former Shopify employee and current shareholder. This is not financial advice.*
