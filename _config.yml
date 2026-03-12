@@ -7,4 +7,5 @@ markdown: kramdown
 cloudflare_web_analytics_token: "47435a3c782a4d4ca965ab21b07a30d3"
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
 show_excerpts: false

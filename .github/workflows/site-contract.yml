@@ -1,0 +1,29 @@
+name: Site Contract
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Build site
+        run: bundle exec jekyll build
+
+      - name: Validate rendered metadata and analytics contract
+        run: python3 script/validate_site_contract.py
