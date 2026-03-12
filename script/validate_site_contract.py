@@ -128,9 +128,12 @@ class ValidationError:
     message: str
 
 
-def post_output_path(permalink: str) -> Path:
+def post_output_paths(permalink: str) -> list[Path]:
     clean_permalink = permalink.strip("/")
-    return SITE_ROOT / clean_permalink / "index.html"
+    return [
+        SITE_ROOT / clean_permalink / "index.html",
+        SITE_ROOT / f"{clean_permalink}.html",
+    ]
 
 
 def validate_front_matter(path: Path, front_matter: dict[str, str]) -> list[ValidationError]:
@@ -160,10 +163,12 @@ def validate_built_output(
     cloudflare_token: str,
 ) -> list[ValidationError]:
     errors: list[ValidationError] = []
-    output_path = post_output_path(front_matter["permalink"])
+    output_paths = post_output_paths(front_matter["permalink"])
+    output_path = next((candidate for candidate in output_paths if candidate.exists()), None)
 
-    if not output_path.exists():
-        return [ValidationError(path, f"missing built HTML at {output_path}")]
+    if output_path is None:
+        joined_paths = ", ".join(str(candidate) for candidate in output_paths)
+        return [ValidationError(path, f"missing built HTML at any of: {joined_paths}")]
 
     parser = HeadParser()
     parser.feed(output_path.read_text(encoding="utf-8"))

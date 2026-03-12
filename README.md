@@ -42,7 +42,7 @@ Rules:
 Build the site, then validate the rendered HTML contract:
 
 ```bash
-bundle exec jekyll build
+bundle exec jekyll build --future
 python3 script/validate_site_contract.py
 ```
 
