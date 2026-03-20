@@ -10,6 +10,8 @@ image: /assets/common-crawl-shopify-card.png
 
 Some context on me: I left Shopify in late 2022 to be a full-time parent. After three years away from tech, I've been trying to get up to speed on everything that happened with AI. Rather than just reading about it, I decided to build something: a data pipeline that scans [Common Crawl](https://commoncrawl.org/) archives for Shopify stores, co-built with Claude.
 
+This post is my best attempt to make sense of the data, not the last word on it. I may have overlooked something important. If you've worked on Common Crawl, seen a similar pattern elsewhere, or think I've got a better explanation staring me in the face, I'd like to hear it.
+
 ## The idea
 
 Back in 2022, Stable Diffusion had just launched and the internet was losing its mind over AI-generated images. Two weeks later, Simon Willison [published an analysis](https://simonwillison.net/2022/Sep/5/laion-aesthetics-weeknotes/) of where its training images came from. `cdn.shopify.com` was the **4th largest source**: 241,000 images out of 12 million. Shopify product images were quietly a significant chunk of what taught the model to understand visual content.
@@ -237,3 +239,5 @@ So the same long-tail merchants who are disappearing from Common Crawl are the o
 I don't know. Common Crawl hasn't publicly announced a methodology change. Their [published statistics](https://commoncrawl.github.io/cc-crawl-statistics/) show total page counts dropped ~30%, but the number of registered domains stayed roughly flat (~39M to ~37M), suggesting reduced crawl depth rather than reduced breadth. The abrupt break at CC-MAIN-2025-47 looks like a deliberate configuration change, not a gradual decline.
 
 The timing is interesting. In November 2025, [The Atlantic reported](https://tech.slashdot.org/story/25/11/08/1930213/common-crawl-criticized-for-quietly-funneling-paywalled-articles-to-ai-developers) that Common Crawl was bypassing paywalls. Common Crawl [responded](https://commoncrawl.org/blog/setting-the-record-straight-common-crawls-commitment-to-transparency-fair-use-and-the-public-good). Whether the timing is coincidence or not, I can't say.
+
+I may be missing something obvious here. If you see an error, have more context, or have a better explanation for the coverage shift, please open an issue in [dneufeld.github.io](https://github.com/dneufeld/dneufeld.github.io/issues) or get in touch.
