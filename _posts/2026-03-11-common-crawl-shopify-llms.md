@@ -212,6 +212,22 @@ Records per host | Dense (Oct 2025) | Sparse (Nov 2025)
 
 In dense crawls, Common Crawl would index many URLs per store: product pages, collection pages, locale variants (English, French, German versions of each page). In sparse crawls, over half the surviving stores have just a single page crawled. Most stores went from having their full catalog indexed to having one or two product pages.
 
+## Other hypotheses explored
+
+As people have sent ideas my way, I've been keeping a list of explanations that seemed plausible at first glance but looked much weaker once I checked them against the data.
+
+**Hypothesis 1: this is mostly custom-domain / `myshopify.com` normalization**
+
+One reasonable guess is that Common Crawl may have started canonicalizing stores more aggressively, keeping just one hostname per shop where older crawls might have included both the custom domain and the backing `myshopify.com` domain.
+
+I don't think that can explain much of the drop.
+
+I checked the dense crawls only and grouped shops by `shop_id`, then counted how many distinct hostnames each shop appeared under. **95.61% of dense-crawl shops appear under exactly one hostname.** Only **3.47%** appear under exactly two hostnames, and only **0.92%** appear under three or more.
+
+That means hostname normalization had limited room to explain the sparse-crawl collapse in the first place. Even before the drop, the overwhelming majority of shops were only showing up under one observed hostname in Common Crawl.
+
+This doesn't prove Common Crawl never consolidated any hostname variants. It just means that custom-domain / `myshopify.com` normalization is unlikely to be the main explanation for losing ~768K Shopify hosts between the dense and sparse eras.
+
 ## Thinking out loud
 
 **How much does this matter for LLM training data?**
