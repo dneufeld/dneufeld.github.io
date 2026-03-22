@@ -72,9 +72,31 @@ a:hover {
   border-top-color: var(--border);
 }
 
+.site-header .wrapper,
+.site-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .footer-col-wrapper,
 .post-meta {
   color: var(--muted);
+}
+
+.site-footer-inner {
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.site-footer-inner a,
+.site-footer-inner a:visited {
+  color: var(--muted);
+}
+
+.site-footer-inner a:hover {
+  color: var(--text);
 }
 
 blockquote {
@@ -146,6 +168,18 @@ table td {
 
 .post-content {
   font-size: 1.05rem;
+}
+
+.home .page-heading {
+  margin-bottom: 0.35rem;
+}
+
+.home > p:first-of-type {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 44rem;
 }
 
 .post-content pre {
