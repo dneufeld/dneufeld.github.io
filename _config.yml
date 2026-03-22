@@ -2,6 +2,8 @@ title: dneufeld notes
 description: Notes on whatever I'm exploring right now
 url: "https://dneufeld.github.io"
 baseurl: ""
+github_url: "https://github.com/dneufeld"
+x_url: "https://x.com/dale_neufeld"
 theme: minima
 markdown: kramdown
 cloudflare_web_analytics_token: "47435a3c782a4d4ca965ab21b07a30d3"
