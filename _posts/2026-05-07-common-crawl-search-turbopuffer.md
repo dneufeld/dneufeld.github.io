@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "I Built a Common Crawl Search Engine in a Day with Turbopuffer"
+title: "Building a Common Crawl Search Engine in a Day with Turbopuffer"
 permalink: /common-crawl-search-turbopuffer/
 description: "A recipe-style build log for parsing Common Crawl WET files, indexing them into turbopuffer, shipping a web UI, and benchmarking the first million documents."
 image: /assets/fuguhocho-sushi-desktop.png
