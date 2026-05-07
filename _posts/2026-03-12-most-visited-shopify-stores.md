@@ -183,7 +183,9 @@ So this does not look like one weird domain slipping through. It looks like a re
 
 ## Why CrUX matters here
 
-CrUX is probably the most direct signal in the mix. It measures real page loads from opted-in Chrome users. That makes it closer to user behavior than resolver-specific DNS data or Western-web backlink graphs, but it also makes it explicitly Chrome-centric rather than web-wide. Because so much ecommerce traffic is mobile, browser mix matters a lot here: markets with heavy Chrome-on-Android usage can show up more clearly, while Safari-heavy or app-heavy shopping behavior can be undercounted. With that caveat, it still helps explain the gap:
+CrUX is probably the most direct signal in the mix. It measures real page loads from opted-in Chrome users. That makes it closer to user behavior than resolver-specific DNS data or Western-web backlink graphs, but it also makes it explicitly Chrome-centric rather than web-wide.
+
+That caveat matters more than I first appreciated. A lot of North American mobile shopping happens on iPhones, in Safari, or inside retailer apps. CrUX does not see that traffic. So CrUX can make Chrome-heavy Android markets easier to see while leaving a real hole where North American mobile commerce should be. It is not a clean "most visited stores" oracle. It is one strong but biased lens, and with that caveat, it still helps explain the gap:
 
 - **Cisco Umbrella** depends on OpenDNS resolver usage, which is weak in South Asia
 - **Majestic** measures backlinks, and backlinks reflect the English-language web's link structure more than actual shopping traffic
@@ -237,7 +239,7 @@ If you only look at case studies or well-known Western DTC brands, you miss both
 
 - This analysis uses **CC-MAIN-2025-43**, the last dense crawl, not a multi-crawl union
 - Tranco ranks **traffic**, not revenue, GMV, or strategic importance
-- CrUX is Chrome-centric, not browser-neutral. On a mobile-heavy web, differences in Chrome, Safari, and in-app shopping behavior can create real visibility gaps.
+- CrUX is Chrome-centric, not browser-neutral. On a mobile-heavy web, differences in Chrome, Safari, and in-app shopping behavior create real visibility gaps, especially for North American iPhone and app traffic.
 - `exact` versus `subdomain` is a hostname classification, not a perfect statement about every page on a domain
 - Headless or heavily customized Shopify storefronts are a known weak spot. If the frontend hides enough Shopify-specific DNS or HTTP signals, this host-level method can under-detect them or miss them entirely. That may help explain why some expected brands, such as Gymshark, do not appear here.
 - Domain normalization here strips `www.`, but does not do full PLD extraction for every ccTLD edge case
