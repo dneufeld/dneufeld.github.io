@@ -134,6 +134,15 @@ pre code {
   background: var(--code-bg);
 }
 
+.post-content .language-bash.highlighter-rouge .highlight,
+.post-content .language-bash.highlighter-rouge .highlight *,
+.post-content .language-shell.highlighter-rouge .highlight,
+.post-content .language-shell.highlighter-rouge .highlight *,
+.post-content .language-sh.highlighter-rouge .highlight,
+.post-content .language-sh.highlighter-rouge .highlight * {
+  color: #fff;
+}
+
 table {
   color: var(--text);
   border-color: var(--border);
