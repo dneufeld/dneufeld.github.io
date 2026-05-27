@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "A Small UCP Catalog API Reliability Note"
+title: "When an Agent API Leaks a MySQL Timeout"
 permalink: /shopify-ucp-catalog-api-reliability-note/
-description: "A short public journal note about a reproducible Shopify UCP Catalog API 500, backend timeout-shaped errors, and why agent-facing APIs need clean reliability boundaries."
+description: "A short public journal note about a reproducible Shopify UCP Catalog API 500, a leaked MySQL statement timeout, and why agent-facing APIs need clean reliability boundaries."
 image: /assets/shopify-ucp-reliability-card.svg
 ---
 
