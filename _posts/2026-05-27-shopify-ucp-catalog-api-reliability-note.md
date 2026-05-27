@@ -6,8 +6,6 @@ description: "A short public journal note about a reproducible Shopify UCP Catal
 image: /assets/shopify-ucp-reliability-card.svg
 ---
 
-*Disclosure: I'm a former Shopify employee and current shareholder. This is not financial advice. I also reported the behavior described below to Shopify before publishing.*
-
 I've been having a blast vibecoding on top of Shopify UCP and the Catalog APIs. I've been building a bunch of little prototypes against both the global catalog and individual merchant catalogs, and it is honestly a little wild that these APIs exist and are this easy to build on.
 
 That is part of why this edge case stuck with me. The surface is powerful enough to unlock a whole new class of commerce experiences, so the boring reliability details suddenly feel a lot more important. Agent-facing APIs invite automated clients by design. Clean errors, bounded query shapes, and predictable backend resource controls are not glamorous, but they matter.
