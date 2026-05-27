@@ -130,6 +130,8 @@ backend query time = number of requests * 3 seconds
 
 That table is intentionally crude. It does not mean this amount of work would all hit one database, one shard, one replica, or one resource pool. Shopify's public engineering writing makes it clear this is not a small database setup. They have written about hundreds of MySQL shards, writers with five or more replicas, thousands of database VMs, KateSQL on GKE, and large MySQL instances. One KateSQL post mentions an 80GB InnoDB buffer pool during debugging.
 
+I also assume Shopify has other load shedding, circuit breakers, throttles, and isolation mechanisms that would prevent this from turning into a practical DoS. The interesting part, at least to me, is what you might start thinking about once you know a public agent-facing API can reliably reach a 3-second MySQL query execution timeout.
+
 The real question is where this work lands.
 
 ```text
@@ -138,7 +140,6 @@ single shop endpoint?
   -> a shared storefront catalog service?
   -> global catalog infrastructure?
   -> a sharded index path?
-  -> something behind a proxy / VTGate / ProxySQL layer?
 ```
 
 From the outside, I do not know.
