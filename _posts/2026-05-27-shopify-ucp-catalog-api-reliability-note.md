@@ -130,7 +130,11 @@ backend query time = number of requests * 3 seconds
 
 That table is intentionally crude. It does not mean this amount of work would all hit one database, one shard, one replica, or one resource pool. Shopify's public engineering writing makes it clear this is not a small database setup. They have written about hundreds of MySQL shards, writers with five or more replicas, thousands of database VMs, KateSQL on GKE, and large MySQL instances. One KateSQL post mentions an 80GB InnoDB buffer pool during debugging.
 
-I also assume Shopify has other load shedding, circuit breakers, throttles, and isolation mechanisms that would prevent this from turning into a practical DoS. The interesting part, at least to me, is what you might start thinking about once you know a public agent-facing API can reliably reach a 3-second MySQL query execution timeout.
+I also assume Shopify has other load shedding, circuit breakers, throttles, and isolation mechanisms that would prevent this from turning into a practical DoS. The interesting part, at least to me, is the operational hint exposed by the error: somewhere on this path, Shopify appears to have a roughly 3-second MySQL statement execution limit for this class of read query.
+
+That kind of detail is useful to defenders, but it also gives curious outsiders a new thing to reason about. Is the limit specific to Storefront UCP? Is it shared across other catalog read paths? Does it apply per replica pool, per tenant, per service, or per query class? Are there query shapes that fail fast, and others that reliably burn almost the full timeout window?
+
+I am not suggesting that any of those questions prove security impact. They do not. But this is why leaking infrastructure-flavored failure modes is awkward: even a boring timeout value becomes a small map of how the backend behaves under stress.
 
 The real question is where this work lands.
 
