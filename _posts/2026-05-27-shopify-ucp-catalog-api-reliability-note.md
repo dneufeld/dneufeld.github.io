@@ -112,21 +112,31 @@ That is a new-ish wrinkle for agent-facing APIs. Error payloads are not just for
 
 ## Napkin math
 
-Assume one request causes about 3 seconds of backend MySQL read/query time.
+The simplest way I know to reason about this is thread-seconds, not requests.
+
+If a query reliably reaches MySQL and runs until a 3 second statement timeout, then each request can create up to 3 seconds of backend database wall time.
 
 ```text
-backend query time = number of requests * 3 seconds
+1 request * 3 seconds = 3 MySQL thread-seconds
 ```
 
-| Requests | Approx backend query time created | Equivalent |
-|---:|---:|---:|
-| 100 | 300 seconds | 5 minutes |
-| 1,000 | 3,000 seconds | 50 minutes |
-| 10,000 | 30,000 seconds | 8.3 hours |
-| 100,000 | 300,000 seconds | 83.3 hours |
-| 1,000,000 | 3,000,000 seconds | 34.7 days |
+That gives a rough saturation model:
+
+```text
+rps_to_keep_busy ~= effective_expensive_query_concurrency / 3
+```
+
+| Effective expensive-query slots | Approx RPS to keep occupied | Requests over 30 minutes | Backend thread-time over 30 minutes |
+|---:|---:|---:|---:|
+| 32 | 10.7 rps | 19,200 | 16 thread-hours |
+| 64 | 21.3 rps | 38,400 | 32 thread-hours |
+| 128 | 42.7 rps | 76,800 | 64 thread-hours |
+| 256 | 85.3 rps | 153,600 | 128 thread-hours |
+| 512 | 170.7 rps | 307,200 | 256 thread-hours |
 
 That table is intentionally crude. It does not mean this amount of work would all hit one database, one shard, one replica, or one resource pool. Shopify's public engineering writing makes it clear this is not a small database setup. They have written about hundreds of MySQL shards, writers with five or more replicas, thousands of database VMs, KateSQL on GKE, and large MySQL instances. One KateSQL post mentions an 80GB InnoDB buffer pool during debugging.
+
+It is also probably the wrong abstraction in several ways. Effective expensive-query concurrency is not the same thing as CPU cores, MySQL connections, service-level concurrency, or total database fleet capacity. The real limiting factor could be CPU, IO, a connection pool, per-tenant throttles, query admission control, or circuit breakers. I am also rusty on MySQL configuration and internals, so treat this as naive outside-in reasoning, not a confident model of Shopify's infrastructure.
 
 I also assume Shopify has other load shedding, circuit breakers, throttles, and isolation mechanisms that would prevent this from turning into a practical DoS. The interesting part, at least to me, is the operational hint exposed by the error: somewhere on this path, Shopify appears to have a roughly 3-second MySQL statement execution limit for this class of read query.
 
@@ -138,7 +148,7 @@ I do not think the public evidence is enough to call this a security vulnerabili
 
 Agentic commerce APIs invite automated clients by design. That makes boring reliability controls matter a lot: clean errors, bounded query shapes, early rejection, rate limiting, tenant isolation, and careful resource accounting.
 
-If anyone has a benign way to reason about whether this is merely messy error handling or something with real resource-amplification potential, I'd be interested.
+If anyone with better MySQL internals knowledge has a cleaner way to reason about this, or can point out where this model is completely wrong, I would be interested. The useful answer may just be "this is messy error handling and nothing more," but I would like to understand the right mental model.
 
 ## References
 
