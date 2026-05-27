@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#101214" />
+  <rect x="36" y="36" width="1128" height="558" rx="20" fill="#171a1d" stroke="#343a42" stroke-width="2" />
+
+  <text x="72" y="92" fill="#8ab8ff" font-size="20" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">dneufeld notes</text>
+  <text x="72" y="122" fill="#aaa39a" font-size="18" font-family="'DejaVu Sans', Verdana, sans-serif">Shopify UCP / Catalog API</text>
+
+  <text x="72" y="196" fill="#e8e5e0" font-size="58" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">A SMALL UCP</text>
+  <text x="72" y="260" fill="#e8e5e0" font-size="58" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">CATALOG API</text>
+  <text x="72" y="324" fill="#e8e5e0" font-size="58" font-family="'DejaVu Sans', Verdana, sans-serif" font-weight="700">RELIABILITY NOTE</text>
+
+  <rect x="72" y="386" width="642" height="92" rx="14" fill="#0f1113" stroke="#343a42" stroke-width="2" />
+  <text x="102" y="424" fill="#e8a87c" font-size="24" font-family="'DejaVu Sans Mono', monospace" font-weight="700">HTTP 500</text>
+  <text x="102" y="456" fill="#aaa39a" font-size="22" font-family="'DejaVu Sans Mono', monospace">maximum statement execution time exceeded</text>
+
+  <rect x="772" y="160" width="300" height="240" rx="18" fill="#0f1113" stroke="#6eccaf" stroke-width="2" />
+  <text x="808" y="212" fill="#6eccaf" font-size="26" font-family="'DejaVu Sans Mono', monospace" font-weight="700">3s</text>
+  <text x="808" y="250" fill="#e8e5e0" font-size="22" font-family="'DejaVu Sans', Verdana, sans-serif">backend query time</text>
+  <line x1="808" y1="286" x2="1036" y2="286" stroke="#343a42" stroke-width="2" />
+  <text x="808" y="330" fill="#8ab8ff" font-size="24" font-family="'DejaVu Sans Mono', monospace">trilogy_read_row</text>
+  <text x="808" y="364" fill="#aaa39a" font-size="20" font-family="'DejaVu Sans', Verdana, sans-serif">error boundary smell</text>
+
+  <text x="72" y="548" fill="#aaa39a" font-size="24" font-family="'DejaVu Sans', Verdana, sans-serif">agent-facing APIs make boring reliability details interesting</text>
+  <text x="72" y="586" fill="#aaa39a" font-size="18" font-family="'DejaVu Sans', Verdana, sans-serif">dneufeld.github.io / shopify-ucp-catalog-api-reliability-note</text>
+</svg>
