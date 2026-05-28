@@ -12,10 +12,14 @@ That is part of why this edge case stuck with me. The surface is powerful enough
 
 This came out of poking at Shopify's newly announced UCP / agentic commerce surface. The launch was publicly discussed by Shopify, including Ilya Grigorik's announcement post on X:
 
-<blockquote class="twitter-tweet">
-  <a href="https://twitter.com/igrigorik/status/2056417991693312370">Ilya Grigorik's UCP announcement on X</a>
+<blockquote class="twitter-tweet" data-dnt="true" data-theme="dark">
+  <p lang="en" dir="ltr">
+    <a href="https://x.com/igrigorik/status/2056417991693312370">Ilya Grigorik's UCP announcement on X</a>
+  </p>
+  <span>- Ilya Grigorik (@igrigorik)</span>
+  <a href="https://x.com/igrigorik/status/2056417991693312370?ref_src=twsrc%5Etfw">May 18, 2026</a>
 </blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
 <noscript>
   <p><a href="https://x.com/igrigorik/status/2056417991693312370">Ilya Grigorik's UCP announcement on X</a></p>
 </noscript>
@@ -142,11 +146,9 @@ I also assume Shopify has other load shedding, circuit breakers, throttles, and 
 
 That kind of detail is useful to defenders, but it also gives curious outsiders a new thing to reason about. Is the limit specific to Storefront UCP? Is it shared across other catalog read paths? Does it apply per replica pool, per tenant, per service, or per query class? Are there query shapes that fail fast, and others that reliably burn almost the full timeout window?
 
-I am not suggesting that any of those questions prove security impact. They do not. But this is why leaking infrastructure-flavored failure modes is awkward: even a boring timeout value becomes a small map of how the backend behaves under stress.
+I do not think the public evidence is enough to call this a security vulnerability. My read is simpler: this is not a smoking gun, but it is a weird edge in a shiny new API surface. Even a boring timeout value can become a small map of how the backend behaves under stress.
 
-I do not think the public evidence is enough to call this a security vulnerability. My read is simpler: this is not a smoking gun, but it is a weird edge in a shiny new API surface.
-
-Agentic commerce APIs invite automated clients by design. That makes boring reliability controls matter a lot: clean errors, bounded query shapes, early rejection, rate limiting, tenant isolation, and careful resource accounting.
+Agentic APIs invite automated clients by design. That makes boring reliability controls matter a lot: clean errors, bounded query shapes, early rejection, rate limiting, tenant isolation, and careful resource accounting.
 
 If anyone with better MySQL internals knowledge has a cleaner way to reason about this, or can point out where this model is completely wrong, I would be interested. The useful answer may just be "this is messy error handling and nothing more," but I would like to understand the right mental model.
 
