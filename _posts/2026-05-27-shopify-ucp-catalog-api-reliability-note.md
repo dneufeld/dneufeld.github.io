@@ -12,10 +12,14 @@ That is part of why this edge case stuck with me. The surface is powerful enough
 
 This came out of poking at Shopify's newly announced UCP / agentic commerce surface. The launch was publicly discussed by Shopify, including Ilya Grigorik's announcement post on X:
 
-<blockquote class="twitter-tweet">
-  <a href="https://twitter.com/igrigorik/status/2056417991693312370">Ilya Grigorik's UCP announcement on X</a>
+<blockquote class="twitter-tweet" data-dnt="true" data-theme="dark">
+  <p lang="en" dir="ltr">
+    <a href="https://x.com/igrigorik/status/2056417991693312370">Ilya Grigorik's UCP announcement on X</a>
+  </p>
+  <span>- Ilya Grigorik (@igrigorik)</span>
+  <a href="https://x.com/igrigorik/status/2056417991693312370?ref_src=twsrc%5Etfw">May 18, 2026</a>
 </blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
 <noscript>
   <p><a href="https://x.com/igrigorik/status/2056417991693312370">Ilya Grigorik's UCP announcement on X</a></p>
 </noscript>
