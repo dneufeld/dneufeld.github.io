@@ -146,11 +146,9 @@ I also assume Shopify has other load shedding, circuit breakers, throttles, and 
 
 That kind of detail is useful to defenders, but it also gives curious outsiders a new thing to reason about. Is the limit specific to Storefront UCP? Is it shared across other catalog read paths? Does it apply per replica pool, per tenant, per service, or per query class? Are there query shapes that fail fast, and others that reliably burn almost the full timeout window?
 
-I am not suggesting that any of those questions prove security impact. They do not. But this is why leaking infrastructure-flavored failure modes is awkward: even a boring timeout value becomes a small map of how the backend behaves under stress.
+I do not think the public evidence is enough to call this a security vulnerability. My read is simpler: this is not a smoking gun, but it is a weird edge in a shiny new API surface. Even a boring timeout value can become a small map of how the backend behaves under stress.
 
-I do not think the public evidence is enough to call this a security vulnerability. My read is simpler: this is not a smoking gun, but it is a weird edge in a shiny new API surface.
-
-Agentic commerce APIs invite automated clients by design. That makes boring reliability controls matter a lot: clean errors, bounded query shapes, early rejection, rate limiting, tenant isolation, and careful resource accounting.
+Agentic APIs invite automated clients by design. That makes boring reliability controls matter a lot: clean errors, bounded query shapes, early rejection, rate limiting, tenant isolation, and careful resource accounting.
 
 If anyone with better MySQL internals knowledge has a cleaner way to reason about this, or can point out where this model is completely wrong, I would be interested. The useful answer may just be "this is messy error handling and nothing more," but I would like to understand the right mental model.
 
