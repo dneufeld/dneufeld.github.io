@@ -12,7 +12,7 @@ The answer, at least for a prototype: a working pipeline, a usable UI, and enoug
 
 <figure>
   <img src="../assets/fuguhocho-sushi-desktop.png" alt="Fugu Hocho search UI showing Common Crawl results for sushi">
-  <figcaption>The one-day search UI, pointed at a pinned Common Crawl slice. The live version is at <a href="https://fuguhocho.com/?q=sushi">fuguhocho.com/?q=sushi</a>.</figcaption>
+  <figcaption>The one-day search UI, pointed at a pinned Common Crawl slice. The live demo ran at fuguhocho.com from May to October 2026 and has since been retired; this screenshot is from launch.</figcaption>
 </figure>
 
 In a day, I got from public Common Crawl WET files to a working search UI at `fuguhocho.com`, with AWS spot workers indexing plaintext web pages into turbopuffer, SQS handling the work queue, Cloudflare serving the frontend, and a benchmark harness collecting query latencies.
